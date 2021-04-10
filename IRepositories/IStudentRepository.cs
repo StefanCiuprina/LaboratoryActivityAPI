@@ -16,7 +16,7 @@ namespace LaboratoryActivityAPI.IRepositories
 
         void Update(StudentModel student);
 
-        void Delete(object id);
+        Task<Object> Delete(string id);
 
         void Delete(StudentModel student);
 

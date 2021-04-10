@@ -19,6 +19,8 @@ namespace LaboratoryActivityAPI.Models
 
         public string Role { get; set; }
 
-        public StudentModel student { get; set; }
+        public int GroupId { get; set; }
+        public string Hobby { get; set; }
+        public string Token { get; set; }
     }
 }

@@ -65,7 +65,7 @@ namespace LaboratoryActivityAPI.Controllers
 
         [HttpPost]
         [Route("RegisterStudent")]
-        //POST : /api/ApplicationUser/Register
+        //POST : /api/ApplicationUser/RegisterStudent
         public async Task<Object> PostStudent(ApplicationUserModel model)
         {
             var result = await _studentRepository.Add(model);
@@ -79,6 +79,27 @@ namespace LaboratoryActivityAPI.Controllers
             } else 
             {
                 return result;
+            }
+        }
+
+        [HttpDelete]
+        [Route("DeleteStudent")]
+        //DELETE : /api/ApplicationUser/DeleteStudent
+        public async Task<Object> DeleteStudent(string id)
+        {
+            var result = await _studentRepository.Delete(id);
+
+            if (result.Equals("no content"))
+            {
+                return NoContent();
+            }
+            else if (result.Equals("not found"))
+            {
+                return NotFound();
+            }
+            else
+            {
+                return BadRequest();
             }
         }
 

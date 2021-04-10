@@ -26,9 +26,9 @@ namespace LaboratoryActivityAPI.Repositories
         public async Task<Object> Add(ApplicationUserModel model)
         {
             string id = await createStudentAccount(model);
-            if (id.Equals("a"))
+            if (!id.Equals(""))
             {
-                var result = addStudentDetails(id, model.student);
+                var result = addStudentDetails(id, model);
                 return result;
             } else
             {
@@ -36,9 +36,28 @@ namespace LaboratoryActivityAPI.Repositories
             }
         }
 
-        public void Delete(object id)
+        public async Task<Object> Delete(string id)
         {
-            throw new NotImplementedException();
+            var studentModel = await _dbContext.Student.FindAsync(id);
+            if (studentModel == null)
+            {
+                return "not found";
+            }
+
+            _dbContext.Student.Remove(studentModel);
+            await _dbContext.SaveChangesAsync();
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            try
+            {
+                var result = await _userManager.DeleteAsync(user);
+                return "no content";
+            }
+            catch (Exception)
+            {
+                return "bad request";
+            }
         }
 
         public void Delete(StudentModel student)
@@ -94,14 +113,14 @@ namespace LaboratoryActivityAPI.Repositories
             };
         }
 
-        private async Task<Object> addStudentDetails(string id, StudentModel studentModel)
+        private async Task<Object> addStudentDetails(string id, ApplicationUserModel model)
         {
             var user = await _userManager.FindByIdAsync(id);
             var student = new StudentModel
             {
-                GroupId = studentModel.GroupId,
-                Hobby = studentModel.Hobby,
-                Token = studentModel.Token,
+                GroupId = model.GroupId,
+                Hobby = model.Hobby,
+                Token = model.Token,
                 User = user,
             };
 
@@ -114,7 +133,7 @@ namespace LaboratoryActivityAPI.Repositories
             }
             catch (DbUpdateException)
             {
-                if (StudentModelExists(studentModel.StudentId))
+                if (StudentModelExists(id))
                 {
                     return "conflict";
                 }
