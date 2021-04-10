@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LaboratoryActivityAPI.Migrations
 {
     [DbContext(typeof(AuthenticationContext))]
-    [Migration("20210410133337_initialCreate")]
+    [Migration("20210410161606_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,29 +21,23 @@ namespace LaboratoryActivityAPI.Migrations
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("LaboratoryActivityAPI.Models.ApplicationUserModel", b =>
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.StudentModel", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Hobby")
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("StudentId");
 
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ApplicationUserModel");
+                    b.ToTable("Student");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -258,6 +252,17 @@ namespace LaboratoryActivityAPI.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.StudentModel", b =>
+                {
+                    b.HasOne("LaboratoryActivityAPI.Models.ApplicationUser", "User")
+                        .WithOne("Student")
+                        .HasForeignKey("LaboratoryActivityAPI.Models.StudentModel", "StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -307,6 +312,11 @@ namespace LaboratoryActivityAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Student");
                 });
 #pragma warning restore 612, 618
         }

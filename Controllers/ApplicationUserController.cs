@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using LaboratoryActivityAPI.Models;
+using LaboratoryActivityAPI.IRepositories;
+using LaboratoryActivityAPI.Repositories;
 
 namespace LaboratoryActivityAPI.Controllers
 {
@@ -24,11 +26,15 @@ namespace LaboratoryActivityAPI.Controllers
         private SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationSettings _appSettings;
 
-        public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<ApplicationSettings> appSettings)
+        IStudentRepository _studentRepository;
+
+        public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<ApplicationSettings> appSettings, AuthenticationContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _appSettings = appSettings.Value;
+
+            _studentRepository = new StudentRepository(context, userManager);
         }
 
         [HttpPost]
@@ -54,6 +60,25 @@ namespace LaboratoryActivityAPI.Controllers
             {
 
                 throw ex;
+            }
+        }
+
+        [HttpPost]
+        [Route("RegisterStudent")]
+        //POST : /api/ApplicationUser/Register
+        public async Task<Object> PostStudent(ApplicationUserModel model)
+        {
+            var result = await _studentRepository.Add(model);
+            
+            if(result.Equals("conflict"))
+            {
+                return Conflict();
+            } else if(result.Equals("bad request"))
+            {
+                return BadRequest();
+            } else 
+            {
+                return result;
             }
         }
 

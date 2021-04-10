@@ -139,3 +139,6 @@ D:\Stefan\UTCN\An3Sem2\SD\Assignment2\Application\LaboratoryActivityAPI\Laborato
 D:\Stefan\UTCN\An3Sem2\SD\Assignment2\Application\LaboratoryActivityAPI\LaboratoryActivityAPI\obj\Debug\net5.0\ref\LaboratoryActivityAPI.dll
 D:\Stefan\UTCN\An3Sem2\SD\Assignment2\Application\LaboratoryActivityAPI\LaboratoryActivityAPI\obj\Debug\net5.0\LaboratoryActivityAPI.pdb
 D:\Stefan\UTCN\An3Sem2\SD\Assignment2\Application\LaboratoryActivityAPI\LaboratoryActivityAPI\obj\Debug\net5.0\LaboratoryActivityAPI.genruntimeconfig.cache
+D:\Stefan\UTCN\An3Sem2\SD\Assignment2\Application\LaboratoryActivityAPI\LaboratoryActivityAPI\bin\Debug\net5.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\Stefan\UTCN\An3Sem2\SD\Assignment2\Application\LaboratoryActivityAPI\LaboratoryActivityAPI\bin\Debug\net5.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\Stefan\UTCN\An3Sem2\SD\Assignment2\Application\LaboratoryActivityAPI\LaboratoryActivityAPI\bin\Debug\net5.0\Newtonsoft.Json.Bson.dll

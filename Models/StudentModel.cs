@@ -10,7 +10,7 @@ namespace LaboratoryActivityAPI.Models
     public class StudentModel
     {
         [Key]
-        public int StudentId { get; set; }
+        public string StudentId { get; set; }
 
         [Column()]
         public int GroupId { get; set; }
@@ -21,8 +21,7 @@ namespace LaboratoryActivityAPI.Models
         [Column(TypeName = "nvarchar(128)")]
         public string Token { get; set; }
 
-        public string? Id { get; set; }
-        [ForeignKey("Id")]
+        [ForeignKey("StudentId")]
         public virtual ApplicationUser User { get; set; }
     }
 }
