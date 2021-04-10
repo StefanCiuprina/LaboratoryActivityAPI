@@ -1391,7 +1391,7 @@
           "System.Threading": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/System.Collections.NonGeneric.dll": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Collections.NonGeneric.dll": {}
@@ -8250,7 +8250,8 @@
       "Microsoft.EntityFrameworkCore.Tools >= 5.0.4",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 5.0.2",
       "Newtonsoft.Json >= 13.0.1",
-      "Swashbuckle.AspNetCore >= 6.1.1"
+      "Swashbuckle.AspNetCore >= 6.1.1",
+      "System.Collections.NonGeneric >= 4.3.0"
     ]
   },
   "packageFolders": {
@@ -8341,6 +8342,10 @@
           "Swashbuckle.AspNetCore": {
             "target": "Package",
             "version": "[6.1.1, )"
+          },
+          "System.Collections.NonGeneric": {
+            "target": "Package",
+            "version": "[4.3.0, )"
           }
         },
         "imports": [

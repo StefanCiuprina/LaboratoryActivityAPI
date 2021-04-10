@@ -1,4 +1,5 @@
 ﻿using LaboratoryActivityAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +9,13 @@ namespace LaboratoryActivityAPI.IRepositories
 {
     public interface IStudentRepository
     {
-        IQueryable<StudentModel> GetAll();
+        Task<List<ApplicationUserModel>> GetAll();
 
         void SaveChanges();
 
         Task<Object> Add(ApplicationUserModel model);
 
-        void Update(StudentModel student);
+        Task<Object> Update(ApplicationUserModel model);
 
         Task<Object> Delete(string id);
 

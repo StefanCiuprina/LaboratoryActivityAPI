@@ -82,12 +82,40 @@ namespace LaboratoryActivityAPI.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("DeleteStudent")]
-        //DELETE : /api/ApplicationUser/DeleteStudent
+        [HttpDelete("{id}")]
+        //DELETE : /api/ApplicationUser/id
         public async Task<Object> DeleteStudent(string id)
         {
             var result = await _studentRepository.Delete(id);
+
+            if (result.Equals("no content"))
+            {
+                return NoContent();
+            }
+            else if (result.Equals("not found"))
+            {
+                return NotFound();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("GetStudents")]
+        //DELETE : /api/ApplicationUser/DeleteStudent
+        public async Task<List<ApplicationUserModel>> GetStudents()
+        {
+            return await _studentRepository.GetAll();
+        }
+
+        [HttpPut]
+        [Route("PutStudent")]
+        //DELETE : /api/ApplicationUser/DeleteStudent
+        public async Task<Object> PutStudent(ApplicationUserModel model)
+        {
+            var result = await _studentRepository.Update(model);
 
             if (result.Equals("no content"))
             {

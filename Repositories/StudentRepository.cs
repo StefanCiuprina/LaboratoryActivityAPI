@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,9 +66,34 @@ namespace LaboratoryActivityAPI.Repositories
             throw new NotImplementedException();
         }
 
-        public IQueryable<StudentModel> GetAll()
+        public async Task<List<ApplicationUserModel>> GetAll()
         {
-            throw new NotImplementedException();
+            
+            return await Task.Run(async () =>
+            {
+                var studentAccounts = _userManager.GetUsersInRoleAsync("Student").Result.ToList();
+                var studentDetails = await _dbContext.Student.ToListAsync();
+
+                var students = new List<ApplicationUserModel>();
+                for(int i = 0; i < studentAccounts.Count(); i++)
+                {
+                    var studentAccount = studentAccounts[i];
+                    var studentDetail = studentDetails[i];
+                    ApplicationUserModel student = new ApplicationUserModel()
+                    {
+                        Id = studentAccount.Id,
+                        UserName = studentAccount.UserName,
+                        Email = studentAccount.Email,
+                        FullName = studentAccount.FullName,
+                        GroupId = studentDetail.GroupId,
+                        Hobby = studentDetail.Hobby,
+                        Token = studentDetail.Token
+                    };
+                    students.Add(student);
+                }
+                return students;
+            });
+
         }
 
         public StudentModel GetById(int id)
@@ -80,9 +106,54 @@ namespace LaboratoryActivityAPI.Repositories
             throw new NotImplementedException();
         }
 
-        public void Update(StudentModel student)
+        public async Task<Object> Update(ApplicationUserModel model)
         {
-            throw new NotImplementedException();
+
+            var user = await _userManager.FindByIdAsync(model.Id);
+
+            user.UserName = model.UserName;
+            user.Email = model.Email;
+            user.FullName = model.FullName;
+
+            IdentityResult result;
+
+            try
+            {
+                result = await _userManager.UpdateAsync(user);
+            }
+            catch (Exception)
+            {
+                return "bad request";
+            }
+
+            var studentModel = new StudentModel()
+            {
+                StudentId = model.Id,
+                GroupId = model.GroupId,
+                Hobby = model.Hobby,
+                Token = model.Token,
+                User = user
+            };
+
+            _dbContext.Entry(studentModel).State = EntityState.Modified;
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                return "no content";
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!StudentModelExists(model.Id))
+                {
+                    return "not found";
+                }
+                else
+                {
+                    return "bad request";
+                }
+            }
+
         }
 
         private async Task<string> createStudentAccount(ApplicationUserModel model)
