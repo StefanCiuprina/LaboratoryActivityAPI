@@ -231,18 +231,22 @@ namespace LaboratoryActivityAPI.Repositories
 
         public async Task<Object> SetStudentRegistered(ApplicationUserModel model)
         {
-            var user = await _userManager.FindByIdAsync(model.Id);
-            var studentModel = new StudentModel()
-            {
-                StudentId = model.Id,
-                GroupId = model.GroupId,
-                Hobby = model.Hobby,
-                Token = model.Token,
-                Registered = true,
-                User = user
-            };
+            var user = await _userManager.FindByNameAsync(model.UserName);
+            var studentDetails = await _dbContext.Student.FindAsync(user.Id);
 
-            _dbContext.Entry(studentModel).State = EntityState.Modified;
+            if(model.Token != studentDetails.Token)
+            {
+                return "bad request";
+            }
+
+            studentDetails.Registered = true;
+
+            //TODO: update password
+            var newPasswordHash = _userManager.PasswordHasher.HashPassword(user, model.Password);
+            user.PasswordHash = newPasswordHash;
+            await _userManager.UpdateAsync(user);
+
+            _dbContext.Entry(studentDetails).State = EntityState.Modified;
 
             try
             {
