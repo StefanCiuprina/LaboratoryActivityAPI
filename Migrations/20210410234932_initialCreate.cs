@@ -161,7 +161,8 @@ namespace LaboratoryActivityAPI.Migrations
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false),
                     Hobby = table.Column<string>(type: "nvarchar(500)", nullable: true),
-                    Token = table.Column<string>(type: "nvarchar(128)", nullable: true)
+                    Token = table.Column<string>(type: "nvarchar(128)", nullable: true),
+                    Registered = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

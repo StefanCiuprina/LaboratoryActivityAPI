@@ -21,6 +21,9 @@ namespace LaboratoryActivityAPI.Models
         [Column(TypeName = "nvarchar(128)")]
         public string Token { get; set; }
 
+        [Column()]
+        public bool Registered { get; set; }
+
         [ForeignKey("StudentId")]
         public virtual ApplicationUser User { get; set; }
     }

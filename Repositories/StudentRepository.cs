@@ -192,6 +192,7 @@ namespace LaboratoryActivityAPI.Repositories
                 GroupId = model.GroupId,
                 Hobby = model.Hobby,
                 Token = model.Token,
+                Registered = false,
                 User = user,
             };
 
@@ -219,6 +220,47 @@ namespace LaboratoryActivityAPI.Repositories
         private bool StudentModelExists(string id)
         {
             return _dbContext.Student.Any(e => e.StudentId == id);
+        }
+
+        public async Task<bool> IsStudentRegistered(string id)
+        {
+            var student = await _dbContext.Student.FindAsync(id);
+            return student.Registered;
+
+        }
+
+        public async Task<Object> SetStudentRegistered(ApplicationUserModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            var studentModel = new StudentModel()
+            {
+                StudentId = model.Id,
+                GroupId = model.GroupId,
+                Hobby = model.Hobby,
+                Token = model.Token,
+                Registered = true,
+                User = user
+            };
+
+            _dbContext.Entry(studentModel).State = EntityState.Modified;
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!StudentModelExists(model.Id))
+                {
+                    return "not found";
+                }
+                else
+                {
+                    return "bad request";
+                }
+            }
+
+            return "no content";
         }
     }
 }

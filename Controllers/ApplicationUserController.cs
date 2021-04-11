@@ -42,7 +42,7 @@ namespace LaboratoryActivityAPI.Controllers
         //POST : /api/ApplicationUser/Register
         public async Task<Object> PostApplicationUser(ApplicationUserModel model)
         {
-            model.Role = "Student";
+            model.Role = "Teacher";
             var applicationUser = new ApplicationUser()
             {
                 UserName = model.UserName,
@@ -103,19 +103,38 @@ namespace LaboratoryActivityAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetStudents")]
-        //DELETE : /api/ApplicationUser/DeleteStudent
+        //GET : /api/ApplicationUser/
         public async Task<List<ApplicationUserModel>> GetStudents()
         {
             return await _studentRepository.GetAll();
         }
 
         [HttpPut]
-        [Route("PutStudent")]
-        //DELETE : /api/ApplicationUser/DeleteStudent
+        //PUT : /api/ApplicationUser
         public async Task<Object> PutStudent(ApplicationUserModel model)
         {
             var result = await _studentRepository.Update(model);
+
+            if (result.Equals("no content"))
+            {
+                return NoContent();
+            }
+            else if (result.Equals("not found"))
+            {
+                return NotFound();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut]
+        [Route("SetUserRegistered")]
+        //PUT : /api/ApplicationUser/SetUserRegistered
+        public async Task<Object> SetUserRegistered(ApplicationUserModel model)
+        {
+            var result = await _studentRepository.SetStudentRegistered(model);
 
             if (result.Equals("no content"))
             {
@@ -141,6 +160,13 @@ namespace LaboratoryActivityAPI.Controllers
             {
                 //Get role assigned to the user
                 var role = await _userManager.GetRolesAsync(user);
+                if (role.FirstOrDefault().Equals("Student")) {
+                    var isStudentRegistered = await _studentRepository.IsStudentRegistered(user.Id);
+                    if (!isStudentRegistered)
+                    {
+                        return BadRequest();
+                    }
+                }
                 IdentityOptions _options = new IdentityOptions();
 
                 var tokenDescriptor = new SecurityTokenDescriptor

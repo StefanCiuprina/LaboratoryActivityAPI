@@ -30,6 +30,9 @@ namespace LaboratoryActivityAPI.Migrations
                     b.Property<string>("Hobby")
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<bool>("Registered")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(128)");
 

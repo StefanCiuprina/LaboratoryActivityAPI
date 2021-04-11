@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LaboratoryActivityAPI.Migrations
 {
     [DbContext(typeof(AuthenticationContext))]
-    [Migration("20210410161606_initialCreate")]
+    [Migration("20210410234932_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,6 +31,9 @@ namespace LaboratoryActivityAPI.Migrations
 
                     b.Property<string>("Hobby")
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("Registered")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(128)");
