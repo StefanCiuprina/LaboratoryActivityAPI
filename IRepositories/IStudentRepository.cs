@@ -11,8 +11,6 @@ namespace LaboratoryActivityAPI.IRepositories
     {
         Task<List<ApplicationUserModel>> GetAll();
 
-        void SaveChanges();
-
         Task<Object> Add(ApplicationUserModel model);
 
         Task<Object> Update(ApplicationUserModel model);
@@ -20,10 +18,6 @@ namespace LaboratoryActivityAPI.IRepositories
         Task<Object> SetStudentRegistered(ApplicationUserModel model);
 
         Task<Object> Delete(string id);
-
-        void Delete(StudentModel student);
-
-        StudentModel GetById(int id);
 
         Task<bool> IsStudentRegistered(string id);
     }

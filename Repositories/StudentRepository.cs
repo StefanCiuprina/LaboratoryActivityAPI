@@ -13,15 +13,13 @@ namespace LaboratoryActivityAPI.Repositories
 {
     public class StudentRepository : IStudentRepository
     {
-        protected AuthenticationContext _dbContext;
+        protected LabActivityContext _dbContext;
         private UserManager<ApplicationUser> _userManager;
-        protected DbSet<StudentModel> _dbSet;
 
-        public StudentRepository(AuthenticationContext dbContext, UserManager<ApplicationUser> userManager)
+        public StudentRepository(LabActivityContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
-            _dbSet = dbContext.Set<StudentModel>();
         }
 
         public async Task<Object> Add(ApplicationUserModel model)
@@ -61,11 +59,6 @@ namespace LaboratoryActivityAPI.Repositories
             }
         }
 
-        public void Delete(StudentModel student)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<ApplicationUserModel>> GetAll()
         {
             
@@ -94,16 +87,6 @@ namespace LaboratoryActivityAPI.Repositories
                 return students;
             });
 
-        }
-
-        public StudentModel GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveChanges()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<Object> Update(ApplicationUserModel model)

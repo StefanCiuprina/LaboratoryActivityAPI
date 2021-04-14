@@ -26,5 +26,11 @@ namespace LaboratoryActivityAPI.Models
 
         [ForeignKey("StudentId")]
         public virtual ApplicationUser User { get; set; }
+
+        [ForeignKey("GroupId")]
+        public virtual GroupModel Group { get; set; }
+
+        public virtual ICollection<AttendanceModel> Attendances { get; set; }
+        public virtual ICollection<SubmissionModel> Submissions { get; set; }
     }
 }

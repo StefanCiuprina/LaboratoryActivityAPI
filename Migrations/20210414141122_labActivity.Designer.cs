@@ -4,20 +4,130 @@ using LaboratoryActivityAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LaboratoryActivityAPI.Migrations
 {
-    [DbContext(typeof(AuthenticationContext))]
-    partial class AuthenticationContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(LabActivityContext))]
+    [Migration("20210414141122_labActivity")]
+    partial class labActivity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.AssignmentModel", b =>
+                {
+                    b.Property<int>("AssignmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("LabId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("AssignmentId");
+
+                    b.HasIndex("LabId")
+                        .IsUnique();
+
+                    b.ToTable("Assignment");
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.AttendanceModel", b =>
+                {
+                    b.Property<int>("AttendanceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("LabId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("AttendanceId");
+
+                    b.HasIndex("LabId");
+
+                    b.HasIndex("StateId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Attendance");
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.GroupModel", b =>
+                {
+                    b.Property<int>("GroupId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("NumberOfStudents")
+                        .HasColumnType("int");
+
+                    b.HasKey("GroupId");
+
+                    b.ToTable("Group");
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.LabModel", b =>
+                {
+                    b.Property<int>("LabId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("LabId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("Lab");
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.StateModel", b =>
+                {
+                    b.Property<int>("StateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("StateId");
+
+                    b.ToTable("State");
+                });
 
             modelBuilder.Entity("LaboratoryActivityAPI.Models.StudentModel", b =>
                 {
@@ -38,7 +148,43 @@ namespace LaboratoryActivityAPI.Migrations
 
                     b.HasKey("StudentId");
 
+                    b.HasIndex("GroupId");
+
                     b.ToTable("Student");
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.SubmissionModel", b =>
+                {
+                    b.Property<int>("SubmissionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("GitLink")
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("SubmissionId");
+
+                    b.HasIndex("AssignmentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Submission");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -253,15 +399,87 @@ namespace LaboratoryActivityAPI.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.AssignmentModel", b =>
+                {
+                    b.HasOne("LaboratoryActivityAPI.Models.LabModel", "Lab")
+                        .WithOne("Assignment")
+                        .HasForeignKey("LaboratoryActivityAPI.Models.AssignmentModel", "LabId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lab");
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.AttendanceModel", b =>
+                {
+                    b.HasOne("LaboratoryActivityAPI.Models.LabModel", "Lab")
+                        .WithMany("Attendances")
+                        .HasForeignKey("LabId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LaboratoryActivityAPI.Models.StateModel", "State")
+                        .WithMany("Attendances")
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LaboratoryActivityAPI.Models.StudentModel", "Student")
+                        .WithMany("Attendances")
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("Lab");
+
+                    b.Navigation("State");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.LabModel", b =>
+                {
+                    b.HasOne("LaboratoryActivityAPI.Models.GroupModel", "Group")
+                        .WithMany("Labs")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("LaboratoryActivityAPI.Models.StudentModel", b =>
                 {
+                    b.HasOne("LaboratoryActivityAPI.Models.GroupModel", "Group")
+                        .WithMany("Students")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LaboratoryActivityAPI.Models.ApplicationUser", "User")
                         .WithOne("Student")
                         .HasForeignKey("LaboratoryActivityAPI.Models.StudentModel", "StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Group");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.SubmissionModel", b =>
+                {
+                    b.HasOne("LaboratoryActivityAPI.Models.AssignmentModel", "Assignment")
+                        .WithMany("Submissions")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LaboratoryActivityAPI.Models.StudentModel", "Student")
+                        .WithMany("Submissions")
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -313,6 +531,37 @@ namespace LaboratoryActivityAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.AssignmentModel", b =>
+                {
+                    b.Navigation("Submissions");
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.GroupModel", b =>
+                {
+                    b.Navigation("Labs");
+
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.LabModel", b =>
+                {
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Attendances");
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.StateModel", b =>
+                {
+                    b.Navigation("Attendances");
+                });
+
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.StudentModel", b =>
+                {
+                    b.Navigation("Attendances");
+
+                    b.Navigation("Submissions");
                 });
 
             modelBuilder.Entity("LaboratoryActivityAPI.Models.ApplicationUser", b =>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LaboratoryActivityAPI.Migrations
 {
-    public partial class initialCreate : Migration
+    public partial class labActivity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -46,6 +46,33 @@ namespace LaboratoryActivityAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Group",
+                columns: table => new
+                {
+                    GroupId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    NumberOfStudents = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Group", x => x.GroupId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "State",
+                columns: table => new
+                {
+                    StateId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(128)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_State", x => x.StateId);
                 });
 
             migrationBuilder.CreateTable(
@@ -155,6 +182,26 @@ namespace LaboratoryActivityAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Lab",
+                columns: table => new
+                {
+                    LabId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lab", x => x.LabId);
+                    table.ForeignKey(
+                        name: "FK_Lab_Group_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Group",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Student",
                 columns: table => new
                 {
@@ -173,6 +220,97 @@ namespace LaboratoryActivityAPI.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Student_Group_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Group",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Assignment",
+                columns: table => new
+                {
+                    AssignmentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LabId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Assignment", x => x.AssignmentId);
+                    table.ForeignKey(
+                        name: "FK_Assignment_Lab_LabId",
+                        column: x => x.LabId,
+                        principalTable: "Lab",
+                        principalColumn: "LabId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Attendance",
+                columns: table => new
+                {
+                    AttendanceId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LabId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    StateId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attendance", x => x.AttendanceId);
+                    table.ForeignKey(
+                        name: "FK_Attendance_Lab_LabId",
+                        column: x => x.LabId,
+                        principalTable: "Lab",
+                        principalColumn: "LabId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Attendance_State_StateId",
+                        column: x => x.StateId,
+                        principalTable: "State",
+                        principalColumn: "StateId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Attendance_Student_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Student",
+                        principalColumn: "StudentId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Submission",
+                columns: table => new
+                {
+                    SubmissionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AssignmentId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    GitLink = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    Comment = table.Column<string>(type: "nvarchar(500)", nullable: true),
+                    Grade = table.Column<int>(type: "int", nullable: false),
+                    SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Submission", x => x.SubmissionId);
+                    table.ForeignKey(
+                        name: "FK_Submission_Assignment_AssignmentId",
+                        column: x => x.AssignmentId,
+                        principalTable: "Assignment",
+                        principalColumn: "AssignmentId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Submission_Student_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Student",
+                        principalColumn: "StudentId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -213,6 +351,47 @@ namespace LaboratoryActivityAPI.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Assignment_LabId",
+                table: "Assignment",
+                column: "LabId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attendance_LabId",
+                table: "Attendance",
+                column: "LabId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attendance_StateId",
+                table: "Attendance",
+                column: "StateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attendance_StudentId",
+                table: "Attendance",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lab_GroupId",
+                table: "Lab",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Student_GroupId",
+                table: "Student",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Submission_AssignmentId",
+                table: "Submission",
+                column: "AssignmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Submission_StudentId",
+                table: "Submission",
+                column: "StudentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -233,13 +412,31 @@ namespace LaboratoryActivityAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Student");
+                name: "Attendance");
+
+            migrationBuilder.DropTable(
+                name: "Submission");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "State");
+
+            migrationBuilder.DropTable(
+                name: "Assignment");
+
+            migrationBuilder.DropTable(
+                name: "Student");
+
+            migrationBuilder.DropTable(
+                name: "Lab");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Group");
         }
     }
 }

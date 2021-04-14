@@ -42,15 +42,33 @@ namespace LaboratoryActivityAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LaboratoryActivityAPI", Version = "v1" });
             });
 
-            services.AddDbContext<AuthenticationContext>(options =>
+            services.AddDbContext<LabActivityContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
 
-            //services.AddDbContext<StudentContext>(options =>
-            //options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+            /*services.AddDbContext<StudentContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+
+            services.AddDbContext<GroupContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+
+            services.AddDbContext<LabContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+
+            services.AddDbContext<AttendanceContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+
+            services.AddDbContext<StateContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+
+            services.AddDbContext<AssignmentContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+
+            services.AddDbContext<SubmissionContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));*/
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AuthenticationContext>();
+                .AddEntityFrameworkStores<LabActivityContext>();
 
             services.Configure<IdentityOptions>(options =>
             {

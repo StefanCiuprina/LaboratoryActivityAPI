@@ -28,7 +28,7 @@ namespace LaboratoryActivityAPI.Controllers
 
         IStudentRepository _studentRepository;
 
-        public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<ApplicationSettings> appSettings, AuthenticationContext context)
+        public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<ApplicationSettings> appSettings, LabActivityContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
