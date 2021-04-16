@@ -4,8 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using LaboratoryActivityAPI.Models.Group;
 
-namespace LaboratoryActivityAPI.Models
+namespace LaboratoryActivityAPI.Models.Lab
 {
     public class LabModel
     {
@@ -17,6 +18,18 @@ namespace LaboratoryActivityAPI.Models
 
         [Column(TypeName = "nvarchar(100)")]
         public string Name { get; set; }
+
+        [Column()]
+        public DateTime DateTime { get; set; }
+
+        [Column(TypeName = "nvarchar(100)")]
+        public string Title { get; set; }
+
+        [Column(TypeName = "nvarchar(100)")]
+        public string Curricula { get; set; }
+
+        [Column(TypeName = "nvarchar(1000)")]
+        public string Description { get; set; }
 
         [ForeignKey("GroupId")]
         public virtual GroupModel Group { get; set; }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LaboratoryActivityAPI.Migrations
 {
-    public partial class labActivity : Migration
+    public partial class LabActivity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -188,7 +188,11 @@ namespace LaboratoryActivityAPI.Migrations
                     LabId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GroupId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Curricula = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", nullable: true)
                 },
                 constraints: table =>
                 {

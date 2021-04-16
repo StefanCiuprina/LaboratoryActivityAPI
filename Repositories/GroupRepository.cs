@@ -45,6 +45,11 @@ namespace LaboratoryActivityAPI.Repositories
             {
                 return "not found";
             }
+            var studentModel = await _context.Student.Where(student => student.GroupId == id).FirstOrDefaultAsync();
+            if(studentModel != null)
+            {
+                return "bad request";
+            }
 
             _context.Group.Remove(groupModel);
             await _context.SaveChangesAsync();
@@ -52,9 +57,17 @@ namespace LaboratoryActivityAPI.Repositories
             return "no content";
         }
 
-        public Task<List<GroupModel>> GetAll()
+        public async Task<List<GroupModel>> GetAll()
         {
-            return _context.Group.ToListAsync();
+            List<GroupModel> groups = await _context.Group.ToListAsync();
+
+            foreach(var group in groups)
+            {
+                group.Students = await _context.Student.Where(student => student.GroupId == group.GroupId).ToListAsync();
+                group.Labs = await _context.Lab.Where(lab => lab.GroupId == group.GroupId).ToListAsync();
+            }
+
+            return groups;
         }
 
         public async Task<GroupModel> GetByName(string name)

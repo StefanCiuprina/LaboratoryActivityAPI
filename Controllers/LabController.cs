@@ -6,54 +6,63 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LaboratoryActivityAPI.Models;
+using LaboratoryActivityAPI.Models.Lab;
 using LaboratoryActivityAPI.IRepositories;
 using LaboratoryActivityAPI.Repositories;
-using LaboratoryActivityAPI.Models.Group;
 
 namespace LaboratoryActivityAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GroupController : ControllerBase
+    public class LabController : ControllerBase
     {
-        IGroupRepository _groupRepository;
-
         private readonly LabActivityContext _context; //TO DELETE
 
-        public GroupController(LabActivityContext context)
+        ILabRepository _labRepository;
+
+        public LabController(LabActivityContext context)
         {
-            _context = context; //TO DELETE
-            _groupRepository = new GroupRepository(context);
+            _context = context; // TO DELETE
+            _labRepository = new LabRepository(context); 
         }
 
-        // GET: api/Group
+        // GET: api/Lab
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GroupModel>>> GetGroup()
+        public async Task<ActionResult<IEnumerable<LabModel>>> GetLab()
         {
-            return await _groupRepository.GetAll();
+            return await _labRepository.GetAll();
+        }
+
+        // GET: api/Lab
+        [HttpGet]
+        [Route("LabNames")]
+        public IList<string> GetAvailableLabNames()
+        {
+            return _labRepository.GetLabNames();
         }
 
         //=======================================================TO SEE IF NEEDED
-        // GET: api/Group/5
+        // GET: api/Lab/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<GroupModel>> GetGroupModel(int id)
+        public async Task<ActionResult<LabModel>> GetLabModel(int id)
         {
-            var groupModel = await _context.Group.FindAsync(id);
+            var labModel = await _context.Lab.FindAsync(id);
 
-            if (groupModel == null)
+            if (labModel == null)
             {
                 return NotFound();
             }
 
-            return groupModel;
+            return labModel;
         }
         //=======================================================
 
-        // PUT: api/Group/5
+        // PUT: api/Lab/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> PutGroupModel(GroupInputModel groupModel)
+        public async Task<IActionResult> PutLabModel(LabInputModel labModel)
         {
-            var result = await _groupRepository.Update(groupModel);
+            var result = await _labRepository.Update(labModel);
 
             if (result.Equals("no content"))
             {
@@ -69,15 +78,17 @@ namespace LaboratoryActivityAPI.Controllers
             }
         }
 
-        // POST: api/Group
+        // POST: api/Lab
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<object> PostGroupModel(GroupInputModel groupModel)
+        public async Task<object> PostLabModel(LabInputModel labModel)
         {
             object result;
-            if (await _groupRepository.GetByName(groupModel.Name) == null)
+            if (await _labRepository.GetByName(labModel.Name) == null)
             {
-                result = await _groupRepository.Add(groupModel);
-            } else
+                result = await _labRepository.Add(labModel);
+            }
+            else
             {
                 result = "bad request";
             }
@@ -92,11 +103,11 @@ namespace LaboratoryActivityAPI.Controllers
             }
         }
 
-        // DELETE: api/Group/5
+        // DELETE: api/Lab/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGroupModel(int id)
+        public async Task<IActionResult> DeleteLabModel(int id)
         {
-            var result = await _groupRepository.Delete(id);
+            var result = await _labRepository.Delete(id);
 
             if (result.Equals("no content"))
             {
@@ -111,6 +122,5 @@ namespace LaboratoryActivityAPI.Controllers
                 return BadRequest();
             }
         }
-
     }
 }

@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LaboratoryActivityAPI.Models.Student;
 
 namespace LaboratoryActivityAPI.Repositories
 {
@@ -141,6 +142,16 @@ namespace LaboratoryActivityAPI.Repositories
 
         private async Task<string> createStudentAccount(ApplicationUserModel model)
         {
+            var groupModel = await _dbContext.Group.FindAsync(model.GroupId);
+
+            if (groupModel == null)
+            {
+                return "";
+            }
+
+            groupModel.NumberOfStudents++;
+            _dbContext.Entry(groupModel).State = EntityState.Modified;
+
             var role = "Student";
             var defaultPassword = "12345";
             var applicationUser = new ApplicationUser()
@@ -151,6 +162,7 @@ namespace LaboratoryActivityAPI.Repositories
             };
             try
             {
+                await _dbContext.SaveChangesAsync();
                 var result = await _userManager.CreateAsync(applicationUser, defaultPassword);
                 await _userManager.AddToRoleAsync(applicationUser, role);
                 if (result.Succeeded)
@@ -170,6 +182,7 @@ namespace LaboratoryActivityAPI.Repositories
         private async Task<Object> addStudentDetails(string id, ApplicationUserModel model)
         {
             var user = await _userManager.FindByIdAsync(id);
+
             var student = new StudentModel
             {
                 GroupId = model.GroupId,

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LaboratoryActivityAPI.Migrations
 {
     [DbContext(typeof(LabActivityContext))]
-    [Migration("20210414141122_labActivity")]
-    partial class labActivity
+    [Migration("20210416121944_LabActivity")]
+    partial class LabActivity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -75,7 +75,7 @@ namespace LaboratoryActivityAPI.Migrations
                     b.ToTable("Attendance");
                 });
 
-            modelBuilder.Entity("LaboratoryActivityAPI.Models.GroupModel", b =>
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.Group.GroupModel", b =>
                 {
                     b.Property<int>("GroupId")
                         .ValueGeneratedOnAdd()
@@ -93,17 +93,29 @@ namespace LaboratoryActivityAPI.Migrations
                     b.ToTable("Group");
                 });
 
-            modelBuilder.Entity("LaboratoryActivityAPI.Models.LabModel", b =>
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.Lab.LabModel", b =>
                 {
                     b.Property<int>("LabId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Curricula")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)");
+
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("LabId");
@@ -129,7 +141,7 @@ namespace LaboratoryActivityAPI.Migrations
                     b.ToTable("State");
                 });
 
-            modelBuilder.Entity("LaboratoryActivityAPI.Models.StudentModel", b =>
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.Student.StudentModel", b =>
                 {
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
@@ -401,7 +413,7 @@ namespace LaboratoryActivityAPI.Migrations
 
             modelBuilder.Entity("LaboratoryActivityAPI.Models.AssignmentModel", b =>
                 {
-                    b.HasOne("LaboratoryActivityAPI.Models.LabModel", "Lab")
+                    b.HasOne("LaboratoryActivityAPI.Models.Lab.LabModel", "Lab")
                         .WithOne("Assignment")
                         .HasForeignKey("LaboratoryActivityAPI.Models.AssignmentModel", "LabId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -412,7 +424,7 @@ namespace LaboratoryActivityAPI.Migrations
 
             modelBuilder.Entity("LaboratoryActivityAPI.Models.AttendanceModel", b =>
                 {
-                    b.HasOne("LaboratoryActivityAPI.Models.LabModel", "Lab")
+                    b.HasOne("LaboratoryActivityAPI.Models.Lab.LabModel", "Lab")
                         .WithMany("Attendances")
                         .HasForeignKey("LabId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -424,7 +436,7 @@ namespace LaboratoryActivityAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LaboratoryActivityAPI.Models.StudentModel", "Student")
+                    b.HasOne("LaboratoryActivityAPI.Models.Student.StudentModel", "Student")
                         .WithMany("Attendances")
                         .HasForeignKey("StudentId");
 
@@ -435,9 +447,9 @@ namespace LaboratoryActivityAPI.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("LaboratoryActivityAPI.Models.LabModel", b =>
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.Lab.LabModel", b =>
                 {
-                    b.HasOne("LaboratoryActivityAPI.Models.GroupModel", "Group")
+                    b.HasOne("LaboratoryActivityAPI.Models.Group.GroupModel", "Group")
                         .WithMany("Labs")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -446,9 +458,9 @@ namespace LaboratoryActivityAPI.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("LaboratoryActivityAPI.Models.StudentModel", b =>
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.Student.StudentModel", b =>
                 {
-                    b.HasOne("LaboratoryActivityAPI.Models.GroupModel", "Group")
+                    b.HasOne("LaboratoryActivityAPI.Models.Group.GroupModel", "Group")
                         .WithMany("Students")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -456,7 +468,7 @@ namespace LaboratoryActivityAPI.Migrations
 
                     b.HasOne("LaboratoryActivityAPI.Models.ApplicationUser", "User")
                         .WithOne("Student")
-                        .HasForeignKey("LaboratoryActivityAPI.Models.StudentModel", "StudentId")
+                        .HasForeignKey("LaboratoryActivityAPI.Models.Student.StudentModel", "StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -473,7 +485,7 @@ namespace LaboratoryActivityAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LaboratoryActivityAPI.Models.StudentModel", "Student")
+                    b.HasOne("LaboratoryActivityAPI.Models.Student.StudentModel", "Student")
                         .WithMany("Submissions")
                         .HasForeignKey("StudentId");
 
@@ -538,14 +550,14 @@ namespace LaboratoryActivityAPI.Migrations
                     b.Navigation("Submissions");
                 });
 
-            modelBuilder.Entity("LaboratoryActivityAPI.Models.GroupModel", b =>
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.Group.GroupModel", b =>
                 {
                     b.Navigation("Labs");
 
                     b.Navigation("Students");
                 });
 
-            modelBuilder.Entity("LaboratoryActivityAPI.Models.LabModel", b =>
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.Lab.LabModel", b =>
                 {
                     b.Navigation("Assignment");
 
@@ -557,7 +569,7 @@ namespace LaboratoryActivityAPI.Migrations
                     b.Navigation("Attendances");
                 });
 
-            modelBuilder.Entity("LaboratoryActivityAPI.Models.StudentModel", b =>
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.Student.StudentModel", b =>
                 {
                     b.Navigation("Attendances");
 

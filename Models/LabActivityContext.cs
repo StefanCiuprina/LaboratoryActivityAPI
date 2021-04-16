@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using LaboratoryActivityAPI.Models;
+using LaboratoryActivityAPI.Models.Student;
+using LaboratoryActivityAPI.Models.Group;
+using LaboratoryActivityAPI.Models.Lab;
 
 namespace LaboratoryActivityAPI.Models
 {

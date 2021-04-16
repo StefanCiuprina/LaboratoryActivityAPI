@@ -4,8 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using LaboratoryActivityAPI.Models.Group;
 
-namespace LaboratoryActivityAPI.Models
+namespace LaboratoryActivityAPI.Models.Student
 {
     public class StudentModel
     {

@@ -76,7 +76,7 @@ namespace LaboratoryActivityAPI.Controllers
             } else if(result.Equals("bad request"))
             {
                 return BadRequest();
-            } else 
+            } else
             {
                 return result;
             }
