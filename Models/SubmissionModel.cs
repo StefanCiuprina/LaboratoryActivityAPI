@@ -19,8 +19,8 @@ namespace LaboratoryActivityAPI.Models
         [Column()]
         public string StudentId { get; set; }
 
-        [Column(TypeName = "nvarchar(200)")]
-        public string GitLink { get; set; }
+        [Column(TypeName = "nvarchar(300)")]
+        public string Link { get; set; }
 
         [Column(TypeName = "nvarchar(500)")]
         public string Comment { get; set; }

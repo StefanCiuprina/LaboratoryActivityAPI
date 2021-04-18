@@ -76,9 +76,26 @@ namespace LaboratoryActivityAPI.Repositories
             return labs;
         }
 
+        public async Task<LabModel> GetById(int labId)
+        {
+            var lab = await _context.Lab.FirstOrDefaultAsync(lab => lab.LabId == labId);
+            if (lab != null)
+            {
+                lab.Attendances = await _context.Attendance.Where(attendance => attendance.LabId == labId).ToListAsync();
+                lab.Assignment = await _context.Assignment.Where(attendance => attendance.LabId == labId).FirstOrDefaultAsync();
+            }
+            return lab;
+        }
+
         public async Task<LabModel> GetByName(string name)
         {
-            return await _context.Lab.FirstOrDefaultAsync(lab => lab.Name == name);
+            var lab = await _context.Lab.FirstOrDefaultAsync(lab => lab.Name == name);
+            if (lab != null)
+            {
+                lab.Attendances = await _context.Attendance.Where(attendance => attendance.LabId == lab.LabId).ToListAsync();
+                lab.Assignment = await _context.Assignment.Where(attendance => attendance.LabId == lab.LabId).FirstOrDefaultAsync();
+            }
+            return lab;
         }
 
         public async Task<string> Update(LabInputModel labInputModel)

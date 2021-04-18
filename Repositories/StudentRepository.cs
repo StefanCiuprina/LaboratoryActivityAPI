@@ -262,5 +262,15 @@ namespace LaboratoryActivityAPI.Repositories
 
             return "no content";
         }
+
+        public async Task<ApplicationUser> GetById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                user.Student = await _dbContext.Student.FindAsync(id);
+            }
+            return user;
+        }
     }
 }

@@ -13,6 +13,8 @@ namespace LaboratoryActivityAPI.IRepositories
     {
         Task<List<GroupModel>> GetAll();
 
+        Task<GroupModel> GetById(int groupId);
+
         Task<GroupModel> GetByName(string name);
 
         Task<object> Add(GroupInputModel model);

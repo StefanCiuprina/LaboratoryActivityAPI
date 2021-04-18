@@ -45,27 +45,6 @@ namespace LaboratoryActivityAPI
             services.AddDbContext<LabActivityContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
 
-            /*services.AddDbContext<StudentContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
-
-            services.AddDbContext<GroupContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
-
-            services.AddDbContext<LabContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
-
-            services.AddDbContext<AttendanceContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
-
-            services.AddDbContext<StateContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
-
-            services.AddDbContext<AssignmentContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
-
-            services.AddDbContext<SubmissionContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));*/
-
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<LabActivityContext>();

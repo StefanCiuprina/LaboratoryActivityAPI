@@ -8,6 +8,7 @@ using LaboratoryActivityAPI.Models;
 using LaboratoryActivityAPI.Models.Student;
 using LaboratoryActivityAPI.Models.Group;
 using LaboratoryActivityAPI.Models.Lab;
+using LaboratoryActivityAPI.Models.Attendance;
 
 namespace LaboratoryActivityAPI.Models
 {

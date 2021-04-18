@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using LaboratoryActivityAPI.Models.Lab;
 using LaboratoryActivityAPI.Models.Student;
 
-namespace LaboratoryActivityAPI.Models
+namespace LaboratoryActivityAPI.Models.Attendance
 {
     public class AttendanceModel
     {

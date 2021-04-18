@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LaboratoryActivityAPI.Migrations
 {
-    public partial class LabActivity : Migration
+    public partial class LabActive : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -68,7 +68,7 @@ namespace LaboratoryActivityAPI.Migrations
                 {
                     StateId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(128)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(128)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -295,7 +295,7 @@ namespace LaboratoryActivityAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AssignmentId = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    GitLink = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    Link = table.Column<string>(type: "nvarchar(300)", nullable: true),
                     Comment = table.Column<string>(type: "nvarchar(500)", nullable: true),
                     Grade = table.Column<int>(type: "int", nullable: false),
                     SubmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false)

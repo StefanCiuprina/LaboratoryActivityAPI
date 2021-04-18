@@ -13,6 +13,8 @@ namespace LaboratoryActivityAPI.IRepositories
 
         Task<LabModel> GetByName(string name);
 
+        Task<LabModel> GetById(int labId);
+
         Task<object> Add(LabInputModel model);
 
         Task<string> Update(LabInputModel model);

@@ -70,9 +70,26 @@ namespace LaboratoryActivityAPI.Repositories
             return groups;
         }
 
+        public async Task<GroupModel> GetById(int groupId)
+        {
+            var group = await _context.Group.FirstOrDefaultAsync(group => group.GroupId == groupId);
+            if (group != null)
+            {
+                group.Students = await _context.Student.Where(student => student.GroupId == group.GroupId).ToListAsync();
+                group.Labs = await _context.Lab.Where(lab => lab.GroupId == group.GroupId).ToListAsync();
+            }
+            return group;
+        }
+
         public async Task<GroupModel> GetByName(string name)
         {
-            return await _context.Group.FirstOrDefaultAsync(group => group.Name == name);
+            var group = await _context.Group.FirstOrDefaultAsync(group => group.Name == name);
+            if (group != null)
+            {
+                group.Students = await _context.Student.Where(student => student.GroupId == group.GroupId).ToListAsync();
+                group.Labs = await _context.Lab.Where(lab => lab.GroupId == group.GroupId).ToListAsync();
+            }
+            return group;
         }
 
         public async Task<string> Update(GroupInputModel groupInputModel)

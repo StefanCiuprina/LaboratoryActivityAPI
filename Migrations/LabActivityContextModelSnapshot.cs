@@ -46,7 +46,7 @@ namespace LaboratoryActivityAPI.Migrations
                     b.ToTable("Assignment");
                 });
 
-            modelBuilder.Entity("LaboratoryActivityAPI.Models.AttendanceModel", b =>
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.Attendance.AttendanceModel", b =>
                 {
                     b.Property<int>("AttendanceId")
                         .ValueGeneratedOnAdd()
@@ -131,7 +131,6 @@ namespace LaboratoryActivityAPI.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(128)");
 
                     b.HasKey("StateId");
@@ -176,11 +175,11 @@ namespace LaboratoryActivityAPI.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("GitLink")
-                        .HasColumnType("nvarchar(200)");
-
                     b.Property<int>("Grade")
                         .HasColumnType("int");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
@@ -420,7 +419,7 @@ namespace LaboratoryActivityAPI.Migrations
                     b.Navigation("Lab");
                 });
 
-            modelBuilder.Entity("LaboratoryActivityAPI.Models.AttendanceModel", b =>
+            modelBuilder.Entity("LaboratoryActivityAPI.Models.Attendance.AttendanceModel", b =>
                 {
                     b.HasOne("LaboratoryActivityAPI.Models.Lab.LabModel", "Lab")
                         .WithMany("Attendances")

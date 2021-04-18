@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using LaboratoryActivityAPI.Models.Attendance;
 
 namespace LaboratoryActivityAPI.Models
 {
@@ -13,7 +14,7 @@ namespace LaboratoryActivityAPI.Models
         public int StateId { get; set; }
 
         [Column(TypeName = "nvarchar(128)")]
-        public int Name { get; set; }
+        public string Name { get; set; }
 
         public virtual ICollection<AttendanceModel> Attendances { get; set; }
     }
