@@ -5,8 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using LaboratoryActivityAPI.Models.Lab;
+using LaboratoryActivityAPI.Models.Submission;
 
-namespace LaboratoryActivityAPI.Models
+namespace LaboratoryActivityAPI.Models.Assignment
 {
     public class AssignmentModel
     {

@@ -9,6 +9,8 @@ using LaboratoryActivityAPI.Models.Student;
 using LaboratoryActivityAPI.Models.Group;
 using LaboratoryActivityAPI.Models.Lab;
 using LaboratoryActivityAPI.Models.Attendance;
+using LaboratoryActivityAPI.Models.Assignment;
+using LaboratoryActivityAPI.Models.Submission;
 
 namespace LaboratoryActivityAPI.Models
 {

@@ -16,24 +16,20 @@ namespace LaboratoryActivityAPI.Controllers
     [ApiController]
     public class LabController : ControllerBase
     {
-        private readonly LabActivityContext _context; //TO DELETE
 
         ILabRepository _labRepository;
 
         public LabController(LabActivityContext context)
         {
-            _context = context; // TO DELETE
             _labRepository = new LabRepository(context); 
         }
 
-        // GET: api/Lab
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LabModel>>> GetLab()
         {
             return await _labRepository.GetAll();
         }
 
-        // GET: api/Lab
         [HttpGet]
         [Route("LabNames")]
         public IList<string> GetAvailableLabNames()
@@ -41,24 +37,6 @@ namespace LaboratoryActivityAPI.Controllers
             return _labRepository.GetLabNames();
         }
 
-        //=======================================================TO SEE IF NEEDED
-        // GET: api/Lab/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<LabModel>> GetLabModel(int id)
-        {
-            var labModel = await _context.Lab.FindAsync(id);
-
-            if (labModel == null)
-            {
-                return NotFound();
-            }
-
-            return labModel;
-        }
-        //=======================================================
-
-        // PUT: api/Lab/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
         public async Task<IActionResult> PutLabModel(LabInputModel labModel)
         {
@@ -78,8 +56,6 @@ namespace LaboratoryActivityAPI.Controllers
             }
         }
 
-        // POST: api/Lab
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<object> PostLabModel(LabInputModel labModel)
         {
@@ -103,7 +79,6 @@ namespace LaboratoryActivityAPI.Controllers
             }
         }
 
-        // DELETE: api/Lab/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLabModel(int id)
         {

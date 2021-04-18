@@ -25,7 +25,7 @@ namespace LaboratoryActivityAPI.Repositories
         {
             var groupModel = await _context.Group.FindAsync(labInputModel.GroupId);
 
-            if ((await labNameExists(labInputModel.Name) > 0) || groupModel == null)
+            if ((await getLabIdByName(labInputModel.Name) > 0) || groupModel == null)
             {
                 return "bad request";
             }
@@ -101,7 +101,7 @@ namespace LaboratoryActivityAPI.Repositories
         public async Task<string> Update(LabInputModel labInputModel)
         {
 
-            if (await labNameExists(labInputModel.Name) != labInputModel.LabId)
+            if (await getLabIdByName(labInputModel.Name) != labInputModel.LabId)
             {
                 return "bad request";
             }
@@ -124,7 +124,7 @@ namespace LaboratoryActivityAPI.Repositories
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LabModelExists(model.GroupId))
+                if (!LabModelExists(model.LabId))
                 {
                     return "not found";
                 }
@@ -137,7 +137,7 @@ namespace LaboratoryActivityAPI.Repositories
             return "no content";
         }
 
-        public async Task<int> labNameExists(string name)
+        public async Task<int> getLabIdByName(string name)
         {
             var lab = await _context.Lab.Where(l => l.Name == name).FirstOrDefaultAsync();
             if(lab == null)

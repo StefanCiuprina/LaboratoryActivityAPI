@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LaboratoryActivityAPI.Models.Group;
 using LaboratoryActivityAPI.Models.Attendance;
+using LaboratoryActivityAPI.Models.Submission;
 
 namespace LaboratoryActivityAPI.Models.Student
 {
