@@ -272,5 +272,60 @@ namespace LaboratoryActivityAPI.Repositories
             }
             return user;
         }
+        public async Task<ApplicationUserModel> GetByIdAsModel(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var studentModel = await _dbContext.Student.FindAsync(id);
+
+            if(studentModel == null)
+            {
+                return null;
+            }
+
+            var student = new ApplicationUserModel()
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                FullName = user.FullName,
+                GroupId = studentModel.GroupId,
+                Hobby = studentModel.Hobby,
+                Token = studentModel.Token
+            };
+            return student;
+        }
+
+        public async Task<ApplicationUserModel> GetByUsernameAsModel(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var studentModel = await _dbContext.Student.FindAsync(user.Id);
+
+            if (studentModel == null)
+            {
+                return null;
+            }
+
+            var student = new ApplicationUserModel()
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                FullName = user.FullName,
+                GroupId = studentModel.GroupId,
+                Hobby = studentModel.Hobby,
+                Token = studentModel.Token
+            };
+            return student;
+        }
     }
 }

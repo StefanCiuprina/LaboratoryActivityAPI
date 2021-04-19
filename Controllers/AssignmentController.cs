@@ -9,6 +9,7 @@ using LaboratoryActivityAPI.Models;
 using LaboratoryActivityAPI.Models.Assignment;
 using LaboratoryActivityAPI.IRepositories;
 using LaboratoryActivityAPI.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaboratoryActivityAPI.Controllers
 {
@@ -23,16 +24,9 @@ namespace LaboratoryActivityAPI.Controllers
             _assignmentRepository = new AssignmentRepository(context);
         }
 
-        /*[HttpGet("{labId}")]
-        public async Task<List<AssignmentModel>> GetForLab(int labId)
-        {
-            var assignmentList = new List<AssignmentModel>();
-            var assignment = await _assignmentRepository.GetForLab(labId);
-            assignmentList.Add(assignment);
-            return assignmentList;
-        }*/
-
+        
         [HttpGet("{labId}")]
+        [Authorize(Roles = "Teacher,Student")]
         public async Task<AssignmentModel> GetForLab(int labId)
         {
             return await _assignmentRepository.GetForLab(labId);
@@ -40,12 +34,14 @@ namespace LaboratoryActivityAPI.Controllers
 
         [HttpGet]
         [Route("Group{groupId}")]
+        [Authorize(Roles = "Teacher,Student")]
         public async Task<List<AssignmentModel>> GetAllForGroup(int groupId)
         {
             return await _assignmentRepository.GetAllForGroup(groupId);
         }
 
         [HttpPut]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> PutAssignmentModel(AssignmentInputModel assignmentInputModel)
         {
             var result = await _assignmentRepository.Update(assignmentInputModel);
@@ -65,6 +61,7 @@ namespace LaboratoryActivityAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Teacher")]
         public async Task<object> PostAssignmentModel(AssignmentInputModel assignmentInputModel)
         {
             var result = await _assignmentRepository.Add(assignmentInputModel);
@@ -80,6 +77,7 @@ namespace LaboratoryActivityAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> DeleteAssignmentModel(int id)
         {
             var result = await _assignmentRepository.Delete(id);
@@ -100,6 +98,7 @@ namespace LaboratoryActivityAPI.Controllers
 
         [HttpDelete]
         [Route("Lab{id}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> DeleteAssignmentModelByLab(int id)
         {
             var result = await _assignmentRepository.DeleteByLab(id);

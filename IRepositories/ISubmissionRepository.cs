@@ -8,9 +8,13 @@ namespace LaboratoryActivityAPI.IRepositories
 {
     public interface ISubmissionRepository
     {
-        Task<List<SubmissionModel>> GetAllForAssignment(int assignmentId);
+        Task<List<SubmissionOutputModel>> GetAllForAssignment(int assignmentId);
 
         Task<List<SubmissionModel>> GetAllForStudent(string studentId);
+
+        Task<SubmissionModel> GetById(int submissionId);
+
+        Task<SubmissionModel> GetByAssignmentAndStudent(int assignmentId, string studentId);
 
         Task<object> Add(SubmissionInputModel model);
 

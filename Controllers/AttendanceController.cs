@@ -10,6 +10,7 @@ using LaboratoryActivityAPI.Models.Attendance;
 using LaboratoryActivityAPI.IRepositories;
 using LaboratoryActivityAPI.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaboratoryActivityAPI.Controllers
 {
@@ -31,6 +32,7 @@ namespace LaboratoryActivityAPI.Controllers
 
         [HttpGet]
         [Route("Lab{labId}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<ActionResult<IEnumerable<AttendanceOutputModel>>> GetAttendancesForLab(int labId)
         {
             return await _attendanceRepository.GetAllForLab(labId);
@@ -38,6 +40,7 @@ namespace LaboratoryActivityAPI.Controllers
 
         [HttpGet]
         [Route("Student{studentId}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<ActionResult<IEnumerable<AttendanceOutputModel>>> GetAttendancesForStudent(string studentId)
         {
             return await _attendanceRepository.GetAllForStudent(studentId);
@@ -45,6 +48,7 @@ namespace LaboratoryActivityAPI.Controllers
 
 
         [HttpPut("{stateId}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> PutAttendanceModel(AttendanceInputModel attendanceInputModel, int stateId)
         {
             var result = await _attendanceRepository.SetState(attendanceInputModel, stateId);
@@ -64,6 +68,7 @@ namespace LaboratoryActivityAPI.Controllers
         }
 
         [HttpPost("{labId}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<ActionResult<AttendanceModel>> PostAttendanceModel(int labId)
         {
             var labModel = await _labRepository.GetById(labId);
@@ -103,6 +108,7 @@ namespace LaboratoryActivityAPI.Controllers
 
         [HttpDelete]
         [Route("Lab{id}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> DeleteAttendancesByLab(int id)
         {
             var result = await _attendanceRepository.DeleteAllByLab(id);
@@ -123,6 +129,7 @@ namespace LaboratoryActivityAPI.Controllers
 
         [HttpDelete]
         [Route("Student{id}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> DeleteAttendancesByStudent(string id)
         {
             var result = await _attendanceRepository.DeleteAllByStudent(id);

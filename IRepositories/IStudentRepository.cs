@@ -13,6 +13,10 @@ namespace LaboratoryActivityAPI.IRepositories
 
         Task<ApplicationUser> GetById(string id);
 
+        Task<ApplicationUserModel> GetByUsernameAsModel(string username);
+
+        Task<ApplicationUserModel> GetByIdAsModel(string id);
+
         Task<Object> Add(ApplicationUserModel model);
 
         Task<Object> Update(ApplicationUserModel model);

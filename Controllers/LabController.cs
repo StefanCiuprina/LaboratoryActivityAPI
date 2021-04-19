@@ -9,6 +9,7 @@ using LaboratoryActivityAPI.Models;
 using LaboratoryActivityAPI.Models.Lab;
 using LaboratoryActivityAPI.IRepositories;
 using LaboratoryActivityAPI.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaboratoryActivityAPI.Controllers
 {
@@ -25,19 +26,30 @@ namespace LaboratoryActivityAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher,Student")]
         public async Task<ActionResult<IEnumerable<LabModel>>> GetLab()
         {
             return await _labRepository.GetAll();
         }
 
         [HttpGet]
+        [Route("Group{groupId}")]
+        [Authorize(Roles = "Teacher,Student")]
+        public async Task<ActionResult<IEnumerable<LabModel>>> GetLabsForGroup(int groupId)
+        {
+            return await _labRepository.GetAllForGroup(groupId);
+        }
+
+        [HttpGet]
         [Route("LabNames")]
+        [Authorize(Roles = "Teacher,Student")]
         public IList<string> GetAvailableLabNames()
         {
             return _labRepository.GetLabNames();
         }
 
         [HttpPut]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> PutLabModel(LabInputModel labModel)
         {
             var result = await _labRepository.Update(labModel);
@@ -57,6 +69,7 @@ namespace LaboratoryActivityAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Teacher")]
         public async Task<object> PostLabModel(LabInputModel labModel)
         {
             object result;
@@ -80,6 +93,7 @@ namespace LaboratoryActivityAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> DeleteLabModel(int id)
         {
             var result = await _labRepository.Delete(id);

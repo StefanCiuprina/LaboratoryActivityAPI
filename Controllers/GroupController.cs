@@ -9,6 +9,7 @@ using LaboratoryActivityAPI.Models;
 using LaboratoryActivityAPI.IRepositories;
 using LaboratoryActivityAPI.Repositories;
 using LaboratoryActivityAPI.Models.Group;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaboratoryActivityAPI.Controllers
 {
@@ -18,39 +19,20 @@ namespace LaboratoryActivityAPI.Controllers
     {
         IGroupRepository _groupRepository;
 
-        private readonly LabActivityContext _context; //TO DELETE
-
         public GroupController(LabActivityContext context)
         {
-            _context = context; //TO DELETE
             _groupRepository = new GroupRepository(context);
         }
 
-        // GET: api/Group
         [HttpGet]
+        [Authorize(Roles = "Teacher,Student")]
         public async Task<ActionResult<IEnumerable<GroupModel>>> GetGroup()
         {
             return await _groupRepository.GetAll();
         }
 
-        //=======================================================TO SEE IF NEEDED
-        // GET: api/Group/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<GroupModel>> GetGroupModel(int id)
-        {
-            var groupModel = await _context.Group.FindAsync(id);
-
-            if (groupModel == null)
-            {
-                return NotFound();
-            }
-
-            return groupModel;
-        }
-        //=======================================================
-
-        // PUT: api/Group/5
         [HttpPut]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> PutGroupModel(GroupInputModel groupModel)
         {
             var result = await _groupRepository.Update(groupModel);
@@ -69,8 +51,8 @@ namespace LaboratoryActivityAPI.Controllers
             }
         }
 
-        // POST: api/Group
         [HttpPost]
+        [Authorize(Roles = "Teacher")]
         public async Task<object> PostGroupModel(GroupInputModel groupModel)
         {
             object result;
@@ -92,8 +74,8 @@ namespace LaboratoryActivityAPI.Controllers
             }
         }
 
-        // DELETE: api/Group/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> DeleteGroupModel(int id)
         {
             var result = await _groupRepository.Delete(id);

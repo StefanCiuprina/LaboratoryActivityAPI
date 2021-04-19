@@ -76,6 +76,24 @@ namespace LaboratoryActivityAPI.Repositories
             return labs;
         }
 
+        public async Task<List<LabModel>> GetAllForGroup(int groupId)
+        {
+            List<LabModel> labs = await _context.Lab.Where(lab => lab.GroupId == groupId).ToListAsync();
+
+            if(labs == null)
+            {
+                return null;
+            }
+
+            foreach (var lab in labs)
+            {
+                lab.Attendances = await _context.Attendance.Where(attendance => attendance.LabId == lab.LabId).ToListAsync();
+                lab.Assignment = await _context.Assignment.Where(assignment => assignment.LabId == lab.LabId).FirstOrDefaultAsync();
+            }
+
+            return labs;
+        }
+
         public async Task<LabModel> GetById(int labId)
         {
             var lab = await _context.Lab.FirstOrDefaultAsync(lab => lab.LabId == labId);

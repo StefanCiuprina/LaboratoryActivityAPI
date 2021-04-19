@@ -109,6 +109,22 @@ namespace LaboratoryActivityAPI.Controllers
             return await _studentRepository.GetAll();
         }
 
+        [HttpGet]
+        [Route("Student{id}")]
+        //GET : /api/ApplicationUser/
+        public async Task<ApplicationUserModel> GetStudentById(string id)
+        {
+            return await _studentRepository.GetByIdAsModel(id);
+        }
+
+        [HttpGet]
+        [Route("StudentName/{username}")]
+        //GET : /api/ApplicationUser/
+        public async Task<ApplicationUserModel> GetStudentByName(string username)
+        {
+            return await _studentRepository.GetByUsernameAsModel(username);
+        }
+
         [HttpPut]
         //PUT : /api/ApplicationUser
         public async Task<Object> PutStudent(ApplicationUserModel model)

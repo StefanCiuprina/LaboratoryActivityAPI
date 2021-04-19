@@ -9,6 +9,8 @@ using LaboratoryActivityAPI.Models;
 using LaboratoryActivityAPI.Models.Submission;
 using LaboratoryActivityAPI.IRepositories;
 using LaboratoryActivityAPI.Repositories;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaboratoryActivityAPI.Controllers
 {
@@ -17,25 +19,44 @@ namespace LaboratoryActivityAPI.Controllers
     public class SubmissionController : ControllerBase
     {
         ISubmissionRepository _submissionRepository;
-        public SubmissionController(LabActivityContext context)
+        public SubmissionController(LabActivityContext context, UserManager<ApplicationUser> userManager)
         {
-            _submissionRepository = new SubmissionRepository(context);
+            _submissionRepository = new SubmissionRepository(context, userManager);
         }
 
+        [Authorize(Roles = "Teacher,Student")]
         [HttpGet("{assignmentId}")]
-        public async Task<ActionResult<IEnumerable<SubmissionModel>>> GetSubmissionForAssignment(int assignmentId)
+        public async Task<ActionResult<IEnumerable<SubmissionOutputModel>>> GetSubmissionForAssignment(int assignmentId)
         {
             return await _submissionRepository.GetAllForAssignment(assignmentId);
         }
 
         [HttpGet]
         [Route("Student{studentId}")]
+        [Authorize(Roles = "Teacher,Student")]
         public async Task<ActionResult<IEnumerable<SubmissionModel>>> GetSubmissionForStudent(string studentId)
         {
             return await _submissionRepository.GetAllForStudent(studentId);
         }
 
+        [HttpGet]
+        [Route("Submission{submissionId}")]
+        [Authorize(Roles = "Teacher,Student")]
+        public async Task<SubmissionModel> GetSubmissionForStudent(int submissionId)
+        {
+            return await _submissionRepository.GetById(submissionId);
+        }
+
+        [HttpGet]
+        [Route("ByStudentAndAssignment{assignmentId}/{studentId}")]
+        [Authorize(Roles = "Teacher,Student")]
+        public async Task<SubmissionModel> GetSubmissionForStudent(int assignmentId, string studentId)
+        {
+            return await _submissionRepository.GetByAssignmentAndStudent(assignmentId, studentId);
+        }
+
         [HttpPut]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> PutSubmissionModel(SubmissionInputModel submissionInputModel)
         {
             var result = await _submissionRepository.Update(submissionInputModel);
@@ -56,6 +77,7 @@ namespace LaboratoryActivityAPI.Controllers
 
         [HttpPut]
         [Route("Grade")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> PutSubmissionModelGrade(SubmissionInputModel submissionInputModel)
         {
             var result = await _submissionRepository.SetGrade(submissionInputModel);
@@ -75,6 +97,7 @@ namespace LaboratoryActivityAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Student")]
         public async Task<object> PostSubmissionModel(SubmissionInputModel submissionInputModel)
         {
             object result;
@@ -91,6 +114,7 @@ namespace LaboratoryActivityAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Teacher,Student")]
         public async Task<IActionResult> DeleteSubmissionModel(int id)
         {
             var result = await _submissionRepository.Delete(id);
@@ -111,6 +135,7 @@ namespace LaboratoryActivityAPI.Controllers
 
         [HttpDelete]
         [Route("Assignment{id}")]
+        [Authorize(Roles = "Teacher,Student")]
         public async Task<IActionResult> DeleteSubmissionModelByAssignment(int id)
         {
             var result = await _submissionRepository.DeleteAllByAssignment(id);

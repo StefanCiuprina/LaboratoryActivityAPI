@@ -11,6 +11,8 @@ namespace LaboratoryActivityAPI.IRepositories
     {
         Task<List<LabModel>> GetAll();
 
+        Task<List<LabModel>> GetAllForGroup(int groupId);
+
         Task<LabModel> GetByName(string name);
 
         Task<LabModel> GetById(int labId);

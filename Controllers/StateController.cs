@@ -21,7 +21,6 @@ namespace LaboratoryActivityAPI.Controllers
             _stateRepository = new StateRepository(context);
         }
 
-        // GET: api/State
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StateModel>>> GetAllStates()
         {

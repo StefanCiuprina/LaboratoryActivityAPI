@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LaboratoryActivityAPI.IRepositories;
 using LaboratoryActivityAPI.Models;
 using LaboratoryActivityAPI.Models.Submission;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace LaboratoryActivityAPI.Repositories
@@ -12,9 +13,11 @@ namespace LaboratoryActivityAPI.Repositories
     public class SubmissionRepository : ISubmissionRepository
     {
         protected readonly LabActivityContext _context;
-        public SubmissionRepository(LabActivityContext dbContext)
+        protected readonly UserManager<ApplicationUser> _userManager;
+        public SubmissionRepository(LabActivityContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _context = dbContext;
+            _userManager = userManager;
         }
         public async Task<object> Add(SubmissionInputModel submissionInputModel)
         {
@@ -74,14 +77,48 @@ namespace LaboratoryActivityAPI.Repositories
             return "no content";
         }
 
-        public async Task<List<SubmissionModel>> GetAllForAssignment(int assignmentId)
+        public async Task<List<SubmissionOutputModel>> GetAllForAssignment(int assignmentId)
         {
-            return await _context.Submission.Where(submission => submission.AssignmentId == assignmentId).ToListAsync();
+            var submissions = await _context.Submission.Where(submission => submission.AssignmentId == assignmentId).ToListAsync();
+
+            var submissionsOutput = new List<SubmissionOutputModel>();
+
+            foreach (var submission in submissions) {
+
+                var student = await _userManager.FindByIdAsync(submission.StudentId);
+                var studentName = student.FullName;
+
+                var submissionOutputModel = new SubmissionOutputModel()
+                {
+                    SubmissionId = submission.SubmissionId,
+                    AssignmentId = submission.AssignmentId,
+                    StudentId = submission.StudentId,
+                    StudentName = studentName,
+                    Link = submission.Link,
+                    Comment = submission.Comment,
+                    Grade = submission.Grade,
+                    SubmissionDate = submission.SubmissionDate
+                };
+
+                submissionsOutput.Add(submissionOutputModel);
+            }
+
+            return submissionsOutput;
         }
 
         public async Task<List<SubmissionModel>> GetAllForStudent(string studentId)
         {
             return await _context.Submission.Where(submission => submission.StudentId == studentId).ToListAsync();
+        }
+
+        public async Task<SubmissionModel> GetByAssignmentAndStudent(int assignmentId, string studentId)
+        {
+            return await _context.Submission.Where(submission => (submission.AssignmentId == assignmentId && submission.StudentId == studentId)).FirstOrDefaultAsync();
+        }
+
+        public async Task<SubmissionModel> GetById(int submissionId)
+        {
+            return await _context.Submission.Where(submission => submission.SubmissionId == submissionId).FirstOrDefaultAsync();
         }
 
         public async Task<object> SetGrade(SubmissionInputModel submissionInputModel)
